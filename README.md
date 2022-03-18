@@ -1,6 +1,6 @@
 # ShellOgre
 Unofficial TradeOgre Shell Script.
 
-Not done yet, not for use (currently).
+Not done yet, lightly tested. Use with great CAUTION.
 
-![ShellOgre](https://raw.githubusercontent.com/ShellCrypto/ShellOgre/master/shellogre.jpg)
+![shellogreonion](https://user-images.githubusercontent.com/36109325/159050236-049a304f-09a0-43d3-8138-f116481e5ee8.jpg)
