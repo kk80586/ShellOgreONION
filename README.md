@@ -1,5 +1,5 @@
-# ShellOgre
-Unofficial TradeOgre Shell Script.
+# ShellOgreONION
+Unofficial TradeOgreONION Shell Script.
 
 Not done yet, lightly tested. Use with great CAUTION.
 
