@@ -28,6 +28,9 @@
 # TODO:
 # Too much to waste time writing up a TODO list right now :P
 #
+# Complete converting script to dynamic.
+# Complete [default] inputs. 
+# Learn at least enough jq to pretty up the output.
 #
 ##############################################################################
 # My TradeOgre ONION deposit - 
@@ -341,9 +344,14 @@ do
       
     ## Market Orders
     
-    curl --request GET \
-    --url https://tradeogre.com/api/v1/orders/BTC-ONION
+    #curl --request GET \
+    #--url https://tradeogre.com/api/v1/orders/BTC-ONION
+    read -p "Enter Market [BTC-ONION]:" market ; market=${market:-BTC-ONION}
+    (curl --request GET \
+     --url $ENDPOINT"/orders/"$market | jq '.[]' | tr -d '"')
     
+    printf "\n"
+    printf "\n"
     
     elif [[ "$m" == "7" ]]; then
     
@@ -365,10 +373,13 @@ do
     curl -s --request GET \
     --url https://tradeogre.com/api/v1/ticker/BTC-ONION 
     
+    read -p "Enter Market [BTC-ONION]:" market ; market=${market:-BTC-ONION}
+    curl -s --request GET \
+    --url $ENDPOINT"/ticker/"$market 
+    
     printf "\n"
     printf "\n"
-    
-    
+        
      elif [[ "$m" == "9" ]]; then
      ## 
   
