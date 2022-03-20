@@ -370,8 +370,8 @@ do
       
     ## Market Ticker
     
-    curl -s --request GET \
-    --url https://tradeogre.com/api/v1/ticker/BTC-ONION 
+    #curl -s --request GET \
+    #--url https://tradeogre.com/api/v1/ticker/BTC-ONION 
     
     read -p "Enter Market [BTC-ONION]:" market ; market=${market:-BTC-ONION}
     curl -s --request GET \
