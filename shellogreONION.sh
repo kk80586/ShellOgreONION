@@ -97,12 +97,12 @@ printf "\n"
 
 #echo -n "          "
 # change menu colors here
-echo -e '\E[32;40m'"\033[1m"
+# echo -e '\E[32;40m'"\033[1m"
 # \033[0m"
 clear
 
 showMenu(){
-echo
+echo -e '\E[32;40m'"\033[1m"
 unset market ; unset quantity ; unset price 
   echo "===================================="
   echo "    ShellOgreONION    "
@@ -351,7 +351,7 @@ do
      --url $ENDPOINT"/orders/"$market | jq) 
      #'.[]' | tr -d '"')
      
-     echo -e '\E[32;40m'"\033[1m"
+     # echo -e '\E[32;40m'"\033[1m"
     
     printf "\n"
     printf "\n"
