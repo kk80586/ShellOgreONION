@@ -348,7 +348,10 @@ do
     #--url https://tradeogre.com/api/v1/orders/BTC-ONION
     read -p "Enter Market [BTC-ONION]:" market ; market=${market:-BTC-ONION}
     (curl --request GET \
-     --url $ENDPOINT"/orders/"$market | jq '.[]' | tr -d '"')
+     --url $ENDPOINT"/orders/"$market | jq) 
+     #'.[]' | tr -d '"')
+     
+     echo -e '\E[32;40m'"\033[1m"
     
     printf "\n"
     printf "\n"
