@@ -326,8 +326,7 @@ do
     --user $ksvalue \
     --url $ENDPOINT$CANCEL  \
     --form uuid=$uuid 
-    echo $uuid
-    
+        
     printf "\n"
     printf "\n"
     
