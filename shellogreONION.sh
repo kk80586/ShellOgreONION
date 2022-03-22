@@ -94,11 +94,6 @@ MKT1=BTC-ONION
 
 printf "\n"
 
-
-#echo -n "          "
-# change menu colors here
-# echo -e '\E[32;40m'"\033[1m"
-# \033[0m"
 clear
 
 showMenu(){
@@ -238,7 +233,7 @@ do
         * ) echo "Please answer yes or no.";;
     esac
    done  
-  curl --request POST \
+  curl -s --request POST \
     --url $ENDPOINT$BUY \
     --user $ksvalue \
     --form market=$market \
@@ -248,17 +243,15 @@ do
     printf "\n"
     printf "\n"
 
-
     elif [[ "$m" == "4" ]]; then
 
     ## Buy BTC with ONION
 
     ONIONBTC=$(curl -s --request GET \
     --url https://tradeogre.com/api/v1/ticker/BTC-ONION | jq '.bid' | tr -d '"') 
-#echo $ONIONBTC  "ONIONBTC"  
 
     BTCUSD=$(curl -s -X GET "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd" -H  "accept: application/json" | jq '.bitcoin.usd')
-#echo $BTCUSD    "BTCUSD"
+
     CURRENTONION=$(curl -s --request POST \
       --url https://tradeogre.com/api/v1/account/balance \
       --user $ksvalue \
@@ -279,9 +272,8 @@ do
     echo "[ If you get an error 'Quantity must be at least 0.00005' then increase quantity or bid higher price.    ]"
     echo
     echo Current ONION Price is 1 ONION = "$BTCONION" BTC, worth $ONIONUSD USD. &&
-    #echo How many BTC would you like to trade for ONION? &&
     echo Your current BTC balance is $CURRENTBTC BTC. 1 BTC = $BTCBTC
-    # buybtconion="BTC-ONION"
+    
     printf "\n"
     
     while true; do
