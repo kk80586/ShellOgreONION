@@ -351,7 +351,7 @@ do
     (curl -s --request POST \
     --url $ENDPOINT$MYORDERS \
     --user $ksvalue \
-    --form market=$market | jq | tr -d ',{}')  
+    --form market=$market | jq . | tr -d '"[],{}')  
        
     elif [[ "$m" == "8" ]]; then
       
