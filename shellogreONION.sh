@@ -348,10 +348,10 @@ do
     ## Get My Market Orders
     
     read -p "Enter Market [BTC-ONION]:" market ; market=${market:-BTC-ONION}
-    curl --request POST \
+    (curl -s --request POST \
     --url $ENDPOINT$MYORDERS \
     --user $ksvalue \
-    --form market=$market  
+    --form market=$market | jq | tr -d ',{}')  
        
     elif [[ "$m" == "8" ]]; then
       
