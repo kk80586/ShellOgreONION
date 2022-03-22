@@ -330,12 +330,12 @@ do
     
     read -p "Enter the uuid # " uuid
     
-    curl --request POST \
+    curl -s --request POST \
     --user $ksvalue \
     --url $ENDPOINT$CANCEL  \
     --form uuid=$uuid 
     echo $uuid
-    # https://tradeogre.com/api/v1/order/cancel
+    
     printf "\n"
     printf "\n"
     
@@ -344,14 +344,9 @@ do
       
     ## Market Orders
     
-    #curl --request GET \
-    #--url https://tradeogre.com/api/v1/orders/BTC-ONION
     read -p "Enter Market [BTC-ONION]:" market ; market=${market:-BTC-ONION}
-    (curl --request GET \
-     --url $ENDPOINT"/orders/"$market | jq) 
-     #'.[]' | tr -d '"')
-     
-     # echo -e '\E[32;40m'"\033[1m"
+    (curl -s --request GET \
+    --url $ENDPOINT"/orders/"$market | jq . | tr -d '{,"}' | sed 's/success: true//g')  
     
     printf "\n"
     printf "\n"
@@ -365,16 +360,10 @@ do
     --url $ENDPOINT$MYORDERS \
     --user $ksvalue \
     --form market=$market  
-    
-    
-    
-    
+       
     elif [[ "$m" == "8" ]]; then
       
     ## Market Ticker
-    
-    #curl -s --request GET \
-    #--url https://tradeogre.com/api/v1/ticker/BTC-ONION 
     
     read -p "Enter Market [BTC-ONION]:" market ; market=${market:-BTC-ONION}
     curl -s --request GET \
@@ -385,18 +374,11 @@ do
         
      elif [[ "$m" == "9" ]]; then
      ## 
-  
-  
-  
-  
-  
-  
+      
     
     printf "\n"
     printf "\n"
-    
-  
-    
+      
   fi
   showMenu
   m=$?
