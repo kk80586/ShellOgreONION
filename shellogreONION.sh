@@ -111,7 +111,8 @@ unset market ; unset quantity ; unset price
   echo "[6] Display Order Book" 
   echo "[7] My Market Orders"
   echo "[8] Market Ticker"
-  echo "[9] Test area"
+  echo "[9] Market History"
+  echo "[10] Test area"
   echo "===================================="
 
   printf "\n"
@@ -364,11 +365,31 @@ do
     printf "\n"
         
      elif [[ "$m" == "9" ]]; then
-     ## 
+     ## GET Market History
+    
+    read -p "Enter Market [BTC-ONION]:" market ; market=${market:-BTC-ONION}
+    echo -e '\E[34;40m'"\033[1m"
+    echo "           DATE           TYPE              PRICE                  QUANTITY"
+    echo -e '\E[32;40m'"\033[1m""           ----           ----              -----                  --------"
+  (curl -s --request GET \
+   --url $ENDPOINT"/history/"$market | jq -cn --stream "fromstream(1|truncate_stream(inputs))")
       
     
     printf "\n"
     printf "\n"
+    
+    
+    elif [[ "$m" == "10" ]]; then
+      #Testing
+      
+      
+      
+      
+      
+      
+      
+    printf "\n"
+    printf "\n"  
       
   fi
   showMenu
