@@ -9,7 +9,6 @@
 # You will need to create a file in the same directory as this file named    #
 # shellogreks.txt   You need to put your API KEY/SECRET in the file on one   #
 # line with a colon ":" between them.                                        # 
-# Do not hit enter at the end of the line.                                   # 
 # Example:                                                                   #
 # ac67d2345:1d742a34c9  (they will be much longer)                           #
 #                                                                            #
