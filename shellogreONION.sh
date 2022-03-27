@@ -358,6 +358,7 @@ do
     ## Market Ticker
     
     read -p "Enter Market [BTC-ONION]:" market ; market=${market:-BTC-ONION}
+    echo -e '\E[33;40m'"\033[1m"
     curl -s --request GET \
     --url $ENDPOINT"/ticker/"$market 
     
