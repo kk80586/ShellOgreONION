@@ -9,7 +9,7 @@ There are inherent dangers in the use of any software, and you are solely respon
 with your equipment and other software installed on your equipment. You are also solely responsible for the protection of your equipment and backup 
 of your data, and THE PROVIDER will not be liable for any damages you may suffer in connection with using, modifying, or distributing this SOFTWARE PRODUCT.
 ----------------------------------------------------------------------------------------------------------------------------------------------------
-To use this script you need an account at TradeOgre https://tradeogre.com/ . You also need to have API key and secret. The key ans secret will go the
+To use this script you need an account at TradeOgre https://tradeogre.com/ . You also need to have API key and secret. The key and secret will go the
 first and only line of the file named shellogreks.txt . The line will look like key:secret  with a colon between the two and no spaces or CRLF at the 
 end of the line (do not hit ENTER). Save file in same folder where script is located. Make sure the script is executable (chmod +x shellogreONION.sh).
 This script has only been tested on Debian Linux (Buster) using Konsole terminal emulator. You will need 'curl' which is likely already installed and 
