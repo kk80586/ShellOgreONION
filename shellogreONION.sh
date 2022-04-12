@@ -67,7 +67,7 @@ TICKER=ticker/              #
 MYBALANCE=account/balance   # Fields= currency . Get the balance of a specific currency for you account. The currency field is required, such as ONION.
 # /account/order/{uuid}     # Retrieve information about a specific order by the uuid of the order.
 MYBALANCES=account/balances # Retrieve all balances for your account.
-CURRVER=1.0.1
+CURRVER=1.0.0
 #######################
 #                  ######## VARIABLES ########  
 # COINV=              # Coin Choice
@@ -382,7 +382,7 @@ do
     elif [[ "$m" == "12" ]]; then
     ## Check For Update
     
-    LATESTVER=$(curl -s  -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/kk80586/ShellOgreONION/tags | grep -n 'v0' | head -1 | sed -n 's/name//p' | sed 's/^.*\(v.*-\).*$/\1/'  | tr -d  ' ":v,-')
+    LATESTVER=$(curl -s  -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/kk80586/ShellOgreONION/tags | grep -n 'v1' | head -1 | sed -n 's/name//p' | sed 's/^.*\(v.*-\).*$/\1/'  | tr -d  ' ":v,3-')
       echo -e '\E[33;40m'"\033[1m"
       echo "Latest version is:" $LATESTVER
       echo "Your verion is:   " $CURRVER
