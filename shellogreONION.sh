@@ -38,7 +38,7 @@
 # Complete [default] inputs. 
 # Learn at least enough jq to pretty up the output.
 # Convert all calls to TradeOgre.
-# Fix Buy/Sell to 
+#  
 ##############################################################################
 ## Set key and secret.
 # KEY=
@@ -48,37 +48,43 @@ ksvalue=`cat shellogreks.txt`
 #    echo $ksvalue
 #######################
 #                  ######## ENDPOINTS #########
-ENDPOINT=https://tradeogre.com/api/v1
+ENDPOINT=https://tradeogre.com/api/v1/
 # endpoints Public API    ( All are method (GET) )
-MARKETS=/markets           # Retrieve a listing of all markets and basic information including current price, volume, high, low, bid and ask.
+MARKETS=markets           # Retrieve a listing of all markets and basic information including current price, volume, high, low, bid and ask.
 # /orders/{market}   # Retrieve the current order book for {market} such as BTC-ONION.
 # /ticker/{market}   # Retrieve the ticker for {market}, volume, high, and low are in the last 24 hours, initialprice is the price from 24 hours ago.
 # /history/{market}  # Retrieve the history of the last trades on {market} limited to 100 of the most recent trades. The date is a Unix UTC timestamp.
 #######################
 # endpoints Private API    ( Buy, Sell, Cancel, Orders, Balance are method POST )
-BUY=/order/buy             # Fields= market quantity price . 
-SELL=/order/sell           # Fields= market quantity price .
-CANCEL=/order/cancel       # Fields= uuid all . Cancel an order on the order book by uuid. The uuid parameter can also be set to all.
-MYORDERS=/account/orders  # Fields= market . Retrieve the active orders under your account. The market field is optional, and leaving it out will return all orders in every market. Date is a Unix UTC timestamp.
-# /account/order/{uuid}    # Retrieve information about a specific order by the uuid of the order.
-# /account/balance         # Fields= currency . Get the balance of a specific currency for you account. The currency field is required, such as ONION.
-# /account/balances        # Retrieve all balances for your account.
+COIN=ONION                  # My favorite coin
+ORDERS=orders/              #
+BUY=order/buy               # Fields= market quantity price . 
+SELL=order/sell             # Fields= market quantity price .
+HISTORY=history/            #
+CANCEL=order/cancel         # Fields= uuid all . Cancel an order on the order book by uuid. The uuid parameter can also be set to all.
+MYORDERS=account/orders     # Fields= market . Retrieve the active orders under your account. The market field is optional, and leaving it out will return all orders in every market. Date is a Unix UTC timestamp.
+TICKER=ticker/              #
+MYBALANCE=account/balance   # Fields= currency . Get the balance of a specific currency for you account. The currency field is required, such as ONION.
+# /account/order/{uuid}     # Retrieve information about a specific order by the uuid of the order.
+MYBALANCES=account/balances # Retrieve all balances for your account.
+CURRVER=0.0.2
 #######################
 #                  ######## VARIABLES ########  
+# COINV=              # Coin Choice
 # coin_choice=        # The coin you want to buy, sell, etc.
 # ksvalue=            # The $KEY:$SECRET pair for authorization for Private API use.
 # market=             # BTC-ONION     BTC-(coin)
-# quantity=           # 13.0           BTC must be > 0.00005000
-# minquantity         # 
+# quantity=           # BTC must be >= 0.00005000
+# minquantity         # Minimum quantity to satisfy BTC amount
 # price=              # 0.00000381    must be > 0.00000001
 # ONIONUSD=           # USD price of ONION
 # BTCONION=           # BTC price of ONION
 # BTCBTC=             # Current USD price of BTC 
 # CURRENTBTC=         # Your current balance of BTC  
 # CURRENTONION=       # Your current balance of ONION
-# EPOCHTIME           # 
+# EPOCHTIME           # Unix epoch- number of seconds that have elapsed since January 1, 1970 at midnight UTC time minus the leap seconds.
 # DATETIME            # 
-MKT1=BTC-ONION        # 
+# MKT1=BTC-ONION      # 
 # 
 ###########################################################################################################################################################
 #              ######## COLORS #########
@@ -91,13 +97,10 @@ MKT1=BTC-ONION        #
 # -e '\E[37;40m'"\033[1m"    # White on Black
 # -e '\E[33;47m'"\033[1m"    # Black on White
 # 
-#
 #######################################################################
 #
 ## Print selection menu.
-
 clear
-
 showMenu(){
 echo -e '\E[32;40m'"\033[1m"
 unset market ; unset quantity ; unset price 
@@ -105,8 +108,8 @@ unset market ; unset quantity ; unset price
   echo "    ShellOgreONION    "
   echo "===================================="
   echo "[0]  EXIT"
-  echo "[1]  Get BTC Balance"
-  echo "[2]  Get ONION Balance"
+  echo "[1]  Get Coin Balance"
+  echo "[2]  Get All Balances"
   echo "[3]  BUY ONION with BTC"
   echo "[4]  SELL ONION for BTC"
   echo "[5]  CANCEL Order by uuid"
@@ -116,6 +119,7 @@ unset market ; unset quantity ; unset price
   echo "[9]  Market History"
   echo "[10] All Markets"
   echo "[11] Convert Epoch time"
+  echo "[12] Check for update"
   echo "===================================="
 
   printf "\n"
@@ -130,41 +134,36 @@ while [[ "$m" != "0" ]]
 do
 ##
   if [[ "$m" == "1" ]]; then
-    ## Get BTC Balance.
+    ## Get Coin Balance.
     
-    echo Your BTC balance is: 
+    read -p "Get currency balance [ONION]:" COINV ; COINV=${COINV:-ONION}
+    echo Your $COINV balance is: 
     echo -e '\E[33;40m'"\033[1m"
     curl -s --request POST \
-    --url https://tradeogre.com/api/v1/account/balance \
+    --url $ENDPOINT$MYBALANCE \
     --user $ksvalue \
-    --form currency=BTC | jq '.balance' | tr '"' ' '
+    --form currency=$COINV | jq '.balance' | tr '"' ' '
     
     echo -e '\E[32;40m'"\033[1m"
-    echo Your available BTC balance is:
+    echo Your available $COINV balance is:
     echo -e '\E[33;40m'"\033[1m"
     curl -s --request POST \
-    --url https://tradeogre.com/api/v1/account/balance \
+    --url $ENDPOINT$MYBALANCE \
     --user $ksvalue \
-    --form currency=BTC | jq '.available' | tr '"' ' '
+    --form currency=$COINV | jq '.available' | tr '"' ' '
+    echo -e '\E[32;40m'"\033[1m"
 
     elif [[ "$m" == "2" ]]; then
-    ## Get ONION Balance.
-
-    echo Your ONION balance is:
-    echo -e '\E[33;40m'"\033[1m"
-    curl -s --request POST \
-    --url https://tradeogre.com/api/v1/account/balance \
-    --user $ksvalue \
-    --form currency=ONION | jq '.balance' | tr '"' ' '
+    ## Get All Balances.
     
-    echo -e '\E[32;40m'"\033[1m"
-    echo Your available ONION balance is:
+   # read -p "Enter Market [BTC-ONION]:" market ; market=${market:-BTC-ONION}
+    echo "Your Coin balances are: "
     echo -e '\E[33;40m'"\033[1m"
-    curl -s --request POST \
-    --url https://tradeogre.com/api/v1/account/balance \
-    --user $ksvalue \
-    --form currency=ONION | jq '.available' | tr '"' ' '
-
+    (curl -s --request GET \
+    --url $ENDPOINT$MYBALANCES \
+    --user $ksvalue | jq -c -r  '.balances | to_entries[] | [ "\(.key), \(.value)" ]' | sed '/0.00000000/d' | tr '[]"' ' ' )
+    echo -e '\E[32;40m'"\033[1m"
+        
     elif [[ "$m" == "3" ]]; then
     ## Buy ONION with BTC
 
@@ -177,14 +176,13 @@ do
     --form currency=BTC | jq '.available' | tr -d '"')
     BTCBTC=$(curl -s https://api-pub.bitfinex.com/v2/ticker/tBTCUSD | awk -F',' '{print  $7}')
     ONIONUSD=$(echo $BTCBTC*$BTCONION | bc)
-    echo "[ If you are going to bid less than the ONION Price       ]"
-    echo "[ you will need to buy more than the minimum quantity.    ]"
-    echo "[ If you get an error 'Quantity must be at least 0.00005' ]"
-    echo "[ then increase quantity or bid higher price.             ]"
-    echo -e '\E[31;40m'"\033[1m" " WARNING: Displayed Buy price is ONION."
-    echo "for TradeOge anyway. Use ticker. Will be fixed in next version.";echo -e '\E[32;40m'"\033[1m"
+    echo "| If you are going to bid less than the ONION Price       |"
+    echo "| you will need to buy more than the minimum quantity.    |"
+    echo "| If you get an error 'Quantity must be at least 0.00005' |"
+    echo "| then increase quantity or bid higher price.             |"
+    echo -e '\E[31;40m'"\033[1m" " WARNING: Displayed Buy price default is price, not bid or ask."
+    echo " Use ticker. Will be fixed in next version.";echo -e '\E[32;40m'"\033[1m"
     echo Current ONION Price is: 1 ONION = "$BTCONION" BTC /  $ONIONUSD USD. &&
-    #echo How many BTC would you like to trade for ONION? &&
     echo Your current BTC balance is $CURRENTBTC BTC. 1 BTC = $BTCBTC
     buybtconion="BTC-ONION"
     printf "\n"
@@ -248,12 +246,12 @@ do
     
     BTCBTC=$(curl -s https://api-pub.bitfinex.com/v2/ticker/tBTCUSD | awk -F',' '{print  $7}')
     ONIONUSD=$(echo $BTCBTC*$BTCONION | bc)
-    echo "[ If you are going to bid less than the ONION Price       ]"
-    echo "[ you will need to buy more than the minimum quantity.    ]"
-    echo "[ If you get an error 'Quantity must be at least 0.00005' ]"
-    echo "[ then increase quantity or bid higher price.             ]"
-    echo -e '\E[31;40m'"\033[1m" " WARNING: Displayed Sell price is ONION"
-    echo "for TradeOge anyway. Use ticker. Will be fixed in next version.";echo -e '\E[32;40m'"\033[1m"
+    echo "| If you are going to bid less than the ONION Price       |"
+    echo "| you will need to buy more than the minimum quantity.    |"
+    echo "| If you get an error 'Quantity must be at least 0.00005' |"
+    echo "| then increase quantity or bid higher price.             |"
+    echo -e '\E[31;40m'"\033[1m" " WARNING: Displayed Sell price is price, not bid or ask."
+    echo "   Use ticker. Will be fixed in next version.";echo -e '\E[32;40m'"\033[1m"
     echo Current ONION Price is: 1 ONION = "$BTCONION" BTC / $ONIONUSD USD. &&
     echo Your current BTC balance is $CURRENTBTC BTC. 1 BTC = $BTCBTC
     
@@ -315,7 +313,7 @@ do
     read -p "Enter Market [BTC-ONION]:" market ; market=${market:-BTC-ONION}
     echo -e '\E[36;40m'"\033[1m"
     (curl -s --request GET \
-    --url $ENDPOINT"/orders/"$market | jq . | tr -d '{,"}' | sed 's/success: true//g')  
+    --url $ENDPOINT$ORDERS$market | jq . | tr -d '{,"}' | sed 's/success: true//g')  
     
     elif [[ "$m" == "7" ]]; then
     ## Get My Market Orders
@@ -323,6 +321,7 @@ do
     unset market
     echo "Type <all> for all Markets."
     read -p "Enter Market [BTC-ONION]:" market ; market=${market:-BTC-ONION}
+    echo -e '\E[33;40m'"\033[1m"
     if [[ $market == all ]]; then
     (curl -s --request POST \
     --url $ENDPOINT$MYORDERS \
@@ -333,7 +332,8 @@ do
     --user $ksvalue \
     --form market=$market | jq . | tr -d '"[],{}')
     fi
-        
+    echo -e '\E[33;40m'"\033[1m"
+    
     printf "\n"
         
     elif [[ "$m" == "8" ]]; then
@@ -342,7 +342,7 @@ do
     read -p "Enter Market [BTC-ONION]:" market ; market=${market:-BTC-ONION}
     echo -e '\E[33;40m'"\033[1m"
     curl -s --request GET \
-    --url $ENDPOINT"/ticker/"$market 
+    --url $ENDPOINT$TICKER$market 
     
     printf "\n"
     printf "\n"
@@ -356,17 +356,13 @@ do
     echo "           DATE           TYPE              PRICE                  QUANTITY"
     echo -e '\E[32;40m'"\033[1m""           ----           ----              -----                  --------"
     (curl -s --request GET \
-    --url $ENDPOINT"/history/"$market | jq -cn --stream "fromstream(1|truncate_stream(inputs))")
-    # --stream "fromstream(1|truncate_stream(inputs))")
-      
+    --url $ENDPOINT$HISTORY$market | jq -cn --stream "fromstream(1|truncate_stream(inputs))")
     
-    printf "\n"
     printf "\n"
         
     elif [[ "$m" == "10" ]]; then
     ## All Markets
       
-    # read -p "Enter Market [BTC-ONION]:" market ; market=${market:-BTC-ONION}
     echo -e '\E[34;40m'"\033[1m"
     (curl -s --request GET \
     --url $ENDPOINT$MARKETS | jq -cn --stream "fromstream(1|truncate_stream(inputs))")
@@ -377,39 +373,27 @@ do
     ## Date Converter
       
     read -p "Type or paste Epoch time :" EPOCHTIME
-    echo -e '\E[34;40m'"\033[1m"
+    echo -e '\E[36;40m'"\033[1m"
     DATETIME= date -d @$EPOCHTIME
     echo $DATETIME    
     
     printf "\n" 
     
     elif [[ "$m" == "12" ]]; then
-    ## Testing
+    ## Check For Update
     
-    ## Convert BTC to USD
-    
-    BTCBTC=$(curl -s https://api-pub.bitfinex.com/v2/ticker/tBTCUSD | awk -F',' '{print  $7}')
-    echo "BTC= "$BTCBTC  
-    BTCONION=$(curl -s --request GET \
-    --url https://tradeogre.com/api/v1/ticker/BTC-ONION | jq '.price' | tr -d '"')
-    echo "ONION= "$BTCONION
-    ONIONUSD=$(echo $BTCBTC*$BTCONION | bc)
-    echo "ONION USD= "$ONIONUSD
+    LATESTVER=$(curl -s  -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/kk80586/ShellOgreONION/tags | grep -n 'v0' | head -1 | sed -n 's/name//p' | sed 's/^.*\(v.*-\).*$/\1/'  | tr -d  ' ":v,-')
+      echo -e '\E[33;40m'"\033[1m"
+      echo "Latest version is:" $LATESTVER
+      echo "Your verion is:   " $CURRVER
+   
+     printf "\n"
        
     elif [[ "$m" == "13" ]]; then
     ## TESTING area
-    ## Market Orders
     
-    read -p "Enter Market [BTC-ONION]:" market ; market=${market:-BTC-ONION}
-    echo -e '\E[34;40m'"\033[1m"
-   #(curl -s --request GET \
-   # --url $ENDPOINT"/orders/"$market | jq . | jq .buy, .sell | tr -d '{,"}' | sed 's/success: true//g') 
-    
-    (curl -s --request GET \
-    --url $ENDPOINT"/orders/"$market | jq . -C | tr -d '{,"}' | sed 's/success: true//g' )
-    #| tr -d '{,"}' | sed 's/success: true//g' )
-           
-    printf "\n" 
+       
+      printf "\n"
       
   fi
   showMenu
