@@ -382,7 +382,7 @@ do
     elif [[ "$m" == "12" ]]; then
     ## Check For Update
     
-    LATESTVER=$(curl -s  -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/kk80586/ShellOgreONION/tags | grep -n 'v1' | head -1 | sed -n 's/name//p' | sed 's/^.*\(v.*-\).*$/\1/'  | tr -d  ' ":v,3-')
+    LATESTVER=$(curl -s  -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/kk80586/ShellOgreONION/tags | grep -n 'v1' | head -1 | sed -n 's/name//p' | sed 's/.*://' | tr -d  ' ":v,-')
       echo -e '\E[33;40m'"\033[1m"
       echo "Latest version is:" $LATESTVER
       echo "Your verion is:   " $CURRVER
