@@ -67,7 +67,7 @@ TICKER=ticker/              #
 MYBALANCE=account/balance   # Fields= currency . Get the balance of a specific currency for you account. The currency field is required, such as ONION.
 # /account/order/{uuid}     # Retrieve information about a specific order by the uuid of the order.
 MYBALANCES=account/balances # Retrieve all balances for your account.
-CURRVER=0.0.2
+CURRVER=1.0.1
 #######################
 #                  ######## VARIABLES ########  
 # COINV=              # Coin Choice
