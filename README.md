@@ -31,7 +31,6 @@ likely never make a version for them. But feel free to fork it and make changes 
 I appreciate any and all feedback as far as usability, any errors, suggestions for new features or changes to existing features. Feel free to submit 
 a PR on the github if you have any ideas of your own and have ready to go (tested) code in your fork. 
 
-![menu_20220406_071917](https://user-images.githubusercontent.com/36109325/161964234-4b2f0384-9129-4fe2-a844-757ac842068d.png)
-
-
-CREDIT: This script stolen from : https://github.com/ShellCrypto/ShellOgre
+![image](https://user-images.githubusercontent.com/36109325/163265318-3eda32a9-617d-4cf9-96cb-bea3564bf812.png)
+    
+CREDIT: This script inspired by : https://github.com/ShellCrypto/ShellOgre
